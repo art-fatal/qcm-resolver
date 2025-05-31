@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Historique des extractions</title>
+    <style>
+        body {
+            width: 800px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+        }
+        .history-item {
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .history-url {
+            font-weight: bold;
+            color: #2196F3;
+        }
+        .history-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .history-content {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .history-actions {
+            margin-top: 10px;
+            text-align: right;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.delete {
+            background-color: #f44336;
+        }
+        button.delete:hover {
+            background-color: #da190b;
+        }
+        .no-history {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+        .clear-history {
+            display: block;
+            margin: 10px 0;
+            padding: 8px 16px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .clear-history:hover {
+            background-color: #c82333;
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Historique des extractions</h1>
+        <div class="actions">
+            <button id="refreshHistoryBtn" class="refresh">🔄 Rafraîchir</button>
+            <button id="clearHistoryBtn" class="delete">🗑️ Effacer l'historique</button>
+        </div>
+        <div id="historyList"></div>
+    </div>
+    <script src="history.js"></script>
+</body>
+</html> 

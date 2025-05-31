@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            width: 800px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+        }
+        .config-section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .url-config {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .url-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .url-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .selector-list {
+            margin-left: 20px;
+        }
+        .selector-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background-color: white;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+        .add-selector {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.delete {
+            background-color: #f44336;
+        }
+        button.delete:hover {
+            background-color: #da190b;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .edit-mode {
+            background-color: #fff3cd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Configuration de l'extracteur de données</h1>
+
+    <div class="config-section">
+        <h2>Ajouter une nouvelle URL à surveiller</h2>
+        <div class="add-url">
+            <input type="text" id="newUrlInput" placeholder="URL (ex: https://example.com/*)" style="width: 60%;">
+            <button id="addUrl">Ajouter URL</button>
+        </div>
+    </div>
+
+    <div id="urlConfigs">
+        <!-- Les configurations d'URL seront ajoutées ici dynamiquement -->
+    </div>
+
+    <div class="actions">
+        <button id="saveAll">Sauvegarder toutes les configurations</button>
+        <button id="exportData">Exporter les données extraites</button>
+    </div>
+
+    <script src="config.js"></script>
+</body>
+</html> 
