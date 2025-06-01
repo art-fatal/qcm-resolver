@@ -1,9 +1,6 @@
 // Fonction pour vérifier si l'URL actuelle est surveillée et obtenir sa configuration
 async function getUrlConfig() {
     const result = await chrome.storage.local.get('urlConfigs');
-    console.log('getUrlConfig');
-    console.log(result);
-    
     if (!result.urlConfigs) {
         return null;
     }
@@ -11,7 +8,6 @@ async function getUrlConfig() {
     // Extraire le nom de domaine de l'URL actuelle
     const currentUrl = window.location.href;
     const currentDomain = new URL(currentUrl).hostname;
-    console.log('Current domain:', currentDomain);
     
     // Trouver la configuration correspondante au domaine actuel
     for (const [urlPattern, config] of Object.entries(result.urlConfigs)) {
@@ -24,7 +20,6 @@ async function getUrlConfig() {
             // Si le pattern est juste un nom de domaine
             patternDomain = urlPattern;
         }
-        console.log('Pattern domain:', patternDomain);
         
         if (patternDomain === currentDomain) {
             return config;
@@ -45,9 +40,6 @@ async function extractData() {
     }
 
     const extractedData = {};
-    
-    console.log('config');
-    console.log(config);
     
     // Parcourir les sélecteurs de la configuration
     for (const [key, selector] of Object.entries(config.selectors)) {
@@ -103,9 +95,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // Écouter les messages du popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log('onMessage popup');
-    console.log(request);
-
     if (request.type === 'EXTRACT_BODY_CONTENT') {
         // Extraire uniquement le texte du body
         const bodyText = document.body.textContent;

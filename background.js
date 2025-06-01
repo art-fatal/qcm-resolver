@@ -6,12 +6,32 @@ let extractedData = {};
 
 // Écouter les messages du content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log('Background script received message:', message);
-    
     if (message.type === 'DATA_EXTRACTED') {
         try {
             // Stocker les données extraites avec l'URL comme clé
             extractedData[message.url] = message.data;
+            
+            // Envoyer les données au serveur
+            fetch('https://qcm-resolver-server.onrender.com/api/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    url: message.url,
+                    data: message.data,
+                    timestamp: Date.now()
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de l\'envoi des données au serveur');
+                }
+                console.log('Données envoyées au serveur avec succès');
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'envoi des données:', error);
+            });
             
             // Ajouter à l'historique existant
             chrome.storage.local.get('extractionHistory', (result) => {
