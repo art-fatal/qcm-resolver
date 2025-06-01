@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentTab = tabs[0];
                 chrome.tabs.sendMessage(currentTab.id, { type: 'EXTRACT_BODY_CONTENT' }, (response) => {
                     if (chrome.runtime.lastError) {
-                        alert('Erreur lors de l\'extraction des données. Assurez-vous que la page est complètement chargée.');
+                        console.log('Erreur lors de l\'extraction des données. Assurez-vous que la page est complètement chargée.');
                     }
                 });
             });
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     URL.revokeObjectURL(url);
                 } else {
-                    alert('Aucune donnée à exporter');
+                    console.log('Aucune donnée à exporter');
                 }
             });
         });

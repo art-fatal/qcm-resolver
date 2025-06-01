@@ -146,7 +146,7 @@ function deleteUrl(url) {
 // Sauvegarder toutes les configurations
 document.getElementById('saveAll').addEventListener('click', () => {
     chrome.storage.local.set({ urlConfigs }, () => {
-        alert('Configurations sauvegardées !');
+        console.log('Configurations sauvegardées !');
     });
 });
 
@@ -165,7 +165,7 @@ document.getElementById('exportData').addEventListener('click', () => {
             
             URL.revokeObjectURL(url);
         } else {
-            alert('Aucune donnée à exporter');
+            console.log('Aucune donnée à exporter');
         }
     });
 }); 

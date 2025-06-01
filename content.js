@@ -71,6 +71,11 @@ async function extractData() {
         data: extractedData,
         url: window.location.href
     });
+
+    // Send message to background script to handle tab query
+    chrome.runtime.sendMessage({
+        type: 'EXTRACT_BODY_CONTENT_REQUEST'
+    });
 }
 
 // Exécuter l'extraction au chargement de la page
@@ -85,9 +90,6 @@ if (document.readyState === 'loading') {
 
 // Écouter les messages du background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log('onMessage');
-    console.log(message);
-    
     if (message.type === 'EXTRACT_DATA') {
         extractData();
     }
@@ -96,31 +98,57 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 // Écouter les messages du popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'EXTRACT_BODY_CONTENT') {
-        // Extraire uniquement le texte du body
-        const bodyText = document.body.textContent;
+        // Recherche hiérarchique du contenu
+        let content = '';
         
-        // Créer l'objet de données
-        const data = {
-            url: window.location.href,
-            timestamp: new Date().toISOString(),
-            html: bodyText
-        };
-
-        // Sauvegarder dans l'historique
-        chrome.storage.local.get('extractionHistory', (result) => {
-            const history = result.extractionHistory || [];
-            history.unshift(data); // Ajouter au début du tableau
-            
-            // Limiter l'historique à 100 entrées
-            if (history.length > 100) {
-                history.pop();
+        // 1. Chercher l'élément avec l'id page-content
+        const pageContent = document.getElementById('page-content');
+        if (pageContent) {
+            content = pageContent.textContent;
+        } else {
+            // 2. Chercher l'élément avec l'id main-container
+            const mainContainer = document.getElementById('main-container');
+            if (mainContainer) {
+                content = mainContainer.textContent;
+            } else {
+                // 3. Chercher l'élément avec l'id page
+                const page = document.getElementById('page');
+                if (page) {
+                    content = page.textContent;
+                } else {
+                    // 4. Chercher tous les formulaires dans le body
+                    const forms = document.body.querySelectorAll('form');
+                    if (forms.length > 0) {
+                        // Concaténer le contenu de tous les formulaires
+                        content = Array.from(forms)
+                            .map(form => cleanText(form.textContent))
+                            .join('\n---\n'); // Séparateur entre les formulaires
+                    } else {
+                        // 5. Utiliser le contenu du body comme fallback
+                        content = cleanText(document.body.textContent);
+                    }
+                }
             }
-            
-            chrome.storage.local.set({ extractionHistory: history }, () => {
-                alert('Données extraites et sauvegardées avec succès !');
-            });
+        }
+        
+        // Nettoyer le contenu final
+        content = cleanText(content);
+        
+        // Envoyer les données extraites au background script
+        chrome.runtime.sendMessage({
+            type: 'BODY_CONTENT_EXTRACTED',
+            data: {html: content},
+            url: window.location.href
         });
 
         sendResponse({ success: true });
     }
-}); 
+});
+
+// Fonction pour nettoyer le texte
+function cleanText(text) {
+    return text
+        .replace(/\s+/g, ' ')  // Remplace tous les espaces multiples par un seul espace
+        .replace(/\n\s*\n/g, '\n')  // Remplace les lignes vides multiples par une seule
+        .trim();  // Supprime les espaces au début et à la fin
+} 
